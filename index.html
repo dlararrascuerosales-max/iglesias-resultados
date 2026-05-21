@@ -200,7 +200,7 @@ let BY_REGION = BY_REGION_FALLBACK;
 let ultimaActualizacion = null;
 
 async function cargarDatos() {
-  const payload = /*DATOS_AQUI*/null/*FIN_DATOS*/;
+  const payload = /*DATOS_AQUI*/{"ItemId":16343,"Id":"%252fShared%2bDocuments%252fdata.json","Name":"data.json","DisplayName":"data.json","Path":"/Shared Documents/data.json","LastModified":"2026-05-21T10:44:55Z","Size":35685,"MediaType":"application/json","IsFolder":false,"ETag":"\"{5BD6BDF8-815B-4D09-9CC2-77D49A3F3694},5\"","FileLocator":"dataset=aHR0cHM6Ly9jb21wYXNzaW9uLnNoYXJlcG9pbnQuY29tL3RlYW1zL1BFT2ZmaWNlLUJVUw==,id=JTI1MmZTaGFyZWQlMmJEb2N1bWVudHMlMjUyZmRhdGEuanNvbg=="}/*FIN_DATOS*/;
   if (!payload) return;
   DATA = payload.data;
   BY_REGION = payload.byRegion;
