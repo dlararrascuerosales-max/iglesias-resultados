@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultados Aprendo y Me Protejo · Compassion</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+  :root{
+    --blue:#005FA3; --blue-dark:#004680; --blue-light:#E8F2FB;
+    --green:#16A34A; --green-light:#D1FAE5;
+    --red:#DC2626; --red-light:#FEE2E2;
+    --amber:#D97706; --amber-light:#FEF3C7;
+    --gray:#6B7280; --gray-light:#9CA3AF; --border:#E5E7EB;
+    --white:#fff; --bg:#F8FAFC; --black:#111827;
+    --radius:12px; --radius-sm:8px; --shadow:0 1px 4px rgba(0,0,0,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--black);min-height:100vh;}
+
+  /* LOGIN */
+  .login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#004680 0%,#005FA3 60%,#0077C8 100%);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;}
+  .login-box{background:#fff;border-radius:20px;padding:36px 32px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+  .login-logo{text-align:center;margin-bottom:24px;}
+  .login-logo img{height:48px;}
+  .login-logo .brand{font-size:20px;font-weight:700;color:var(--blue);margin-top:8px;}
+  .login-logo .sub{font-size:12px;color:var(--gray);margin-top:2px;}
+  .login-box h2{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--black);}
+  .login-step{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;border:1.5px solid var(--border);}
+  .step-num{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .step-text{font-size:13px;color:var(--gray);}
+  .login-sep{text-align:center;color:var(--gray-light);font-size:12px;margin:14px 0 10px;}
+  .login-field label{font-size:12px;font-weight:600;color:var(--gray);margin-bottom:5px;display:block;}
+  .login-field select,.login-field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;color:var(--black);background:#fff;outline:none;transition:border .15s;}
+  .login-field select:focus,.login-field input:focus{border-color:var(--blue);}
+  .login-field{margin-bottom:12px;}
+  .btn-login{width:100%;padding:12px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;transition:background .15s;}
+  .btn-login:hover{background:var(--blue-dark);}
+  .login-error{color:var(--red);font-size:12px;margin-top:8px;display:none;text-align:center;padding:8px;background:var(--red-light);border-radius:6px;}
+
+  /* HEADER */
+  .header{background:var(--blue);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+  .header-left{display:flex;align-items:center;gap:12px;}
+  .header-logo{font-size:15px;font-weight:700;color:#fff;}
+  .header-sub{font-size:11px;color:rgba(255,255,255,.7);}
+  .header-church{background:rgba(255,255,255,.15);border-radius:8px;padding:6px 12px;text-align:right;}
+  .hc-code{font-size:13px;font-weight:700;color:#fff;}
+  .hc-region{font-size:10px;color:rgba(255,255,255,.7);}
+  .btn-logout{background:rgba(255,255,255,.15);border:none;color:#fff;padding:7px 13px;border-radius:8px;font-family:inherit;font-size:12px;cursor:pointer;transition:background .15s;}
+  .btn-logout:hover{background:rgba(255,255,255,.25);}
+
+  /* MAIN */
+  .main{max-width:740px;margin:0 auto;padding:20px 16px 60px;}
+
+  /* INTRO CARD */
+  .intro-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:18px 20px;margin-bottom:20px;box-shadow:var(--shadow);}
+  .intro-title{font-size:15px;font-weight:700;color:var(--blue);margin-bottom:4px;}
+  .intro-sub{font-size:12px;color:var(--gray);line-height:1.5;}
+  .total-badge{display:inline-flex;align-items:center;gap:6px;background:var(--blue-light);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--blue);margin-top:10px;}
+
+  /* INDICATOR TABLE */
+  .ind-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);}
+  .ind-table thead tr{background:var(--blue);}
+  .ind-table thead th{padding:11px 14px;font-size:11px;font-weight:700;color:#fff;text-align:left;letter-spacing:.3px;text-transform:uppercase;}
+  .ind-table thead th.right{text-align:right;}
+  .ind-table tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+  .ind-table tbody tr:last-child{border-bottom:none;}
+  .ind-table tbody tr:hover{background:#F9FAFB;}
+  .ind-table td{padding:12px 14px;font-size:13px;vertical-align:middle;}
+  .ind-name{font-weight:600;color:var(--black);font-size:13px;}
+  .ind-desc{font-size:11px;color:var(--gray);margin-top:2px;line-height:1.4;}
+  .score-cell{text-align:right;}
+  .score-wrap{display:flex;align-items:center;justify-content:flex-end;gap:6px;}
+  .score-num{font-size:22px;font-weight:700;}
+  .score-total{font-size:12px;color:var(--gray);}
+  .score-pct{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;}
+  .pct-high{background:var(--green-light);color:#065F46;}
+  .pct-mid{background:var(--amber-light);color:#92400E;}
+  .pct-low{background:var(--red-light);color:#991B1B;}
+
+  /* PROGRESS BAR */
+  .prog-cell{width:140px;}
+  .prog-bar-wrap{background:#F3F4F6;border-radius:20px;height:8px;overflow:hidden;}
+  .prog-bar{height:100%;border-radius:20px;transition:width .6s ease;}
+  .prog-high{background:var(--green);}
+  .prog-mid{background:var(--amber);}
+  .prog-low{background:var(--red);}
+
+  /* ICON BADGE */
+  .ind-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+
+  /* SECTION TITLE */
+  .sec-label{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin:20px 0 8px 2px;}
+
+  /* SUMMARY CARDS */
+  .summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px;}
+  .sum-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);text-align:center;}
+  .sum-icon{font-size:20px;margin-bottom:4px;}
+  .sum-val{font-size:24px;font-weight:700;color:var(--blue);}
+  .sum-label{font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+  .sum-pct{font-size:11px;font-weight:600;margin-top:3px;}
+
+  /* NOTA */
+  .nota{background:var(--blue-light);border-radius:var(--radius-sm);padding:10px 14px;font-size:11px;color:var(--gray);margin-top:16px;display:flex;gap:8px;align-items:flex-start;}
+
+  @media(max-width:560px){
+    .prog-cell{display:none;}
+    .header{flex-wrap:wrap;gap:8px;}
+    .ind-table td{padding:10px 10px;}
+    .score-num{font-size:18px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="login-logo">
+      <div style="font-size:28px;">💖</div>
+      <div class="brand">Compassion Perú</div>
+      <div class="sub">Portal de Resultados · Aprendo y Me Protejo</div>
+    </div>
+    <h2>Consulta los resultados de tu iglesia</h2>
+    <div class="login-step"><div class="step-num">1</div><div class="step-text">Escribe el código de tu iglesia (ej. PE0358)</div></div>
+    <div class="login-step"><div class="step-num">2</div><div class="step-text">Presiona <strong>Ver resultados</strong></div></div>
+    <div class="login-sep">— Ingresa aquí —</div>
+    <div class="login-field">
+      <label>Código de iglesia</label>
+      <input type="text" id="inputCodigo" placeholder="Ej: PE0358" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')login()" autocomplete="off" autocorrect="off" spellcheck="false"/>
+    </div>
+    <button class="btn-login" onclick="login()">Ver resultados →</button>
+    <div class="login-error" id="loginError">⚠️ No se encontraron datos para esta iglesia. Verifica el código.</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header" id="appHeader" style="display:none;">
+  <div class="header-left">
+    <div>
+      <div class="header-logo">💖 Compassion Perú</div>
+      <div class="header-sub">Aprendo y Me Protejo</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="header-church">
+      <div class="hc-code" id="hdrCodigo">—</div>
+      <div class="hc-region" id="hdrRegion">—</div>
+    </div>
+    <button class="btn-logout" onclick="logout()">Salir</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="appMain" style="display:none;">
+
+  <div class="intro-card">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+      <div class="intro-title" style="margin-bottom:0;">📊 Resultados de la encuesta — Tu iglesia</div>
+    </div>
+    <div class="intro-sub">Resultados de la encuesta <em>¡Tu opinión nos importa mucho!</em> del programa <strong>Aprendo y Me Protejo</strong>.</div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;" id="tipoBtns"></div>
+    <div class="total-badge" id="totalBadge" style="margin-top:10px;">👥 — encuestados</div>
+    <div id="actualizadoBadge" style="display:none;margin-top:6px;font-size:11px;color:var(--gray);background:#F3F4F6;padding:4px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:5px;"></div>
+  </div>
+
+  <!-- TABLA INDICADORES -->
+  <div class="sec-label">📋 Detalle por indicador</div>
+  <table class="ind-table">
+    <thead>
+      <tr>
+        <th style="width:42px;"></th>
+        <th>Indicador</th>
+        <th class="right" style="width:110px;">Respondieron bien</th>
+        <th class="right prog-cell" style="width:150px;">Progreso</th>
+      </tr>
+    </thead>
+    <tbody id="indTableBody"></tbody>
+  </table>
+
+  <div class="nota">
+    ℹ️ <span>Los indicadores muestran cuántos participantes de tu iglesia respondieron correctamente según los criterios definidos. El porcentaje indica el nivel de logro respecto al total de encuestados.</span>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIGURACIÓN ─────────────────────────────────────────────────────────────
+// Reemplaza esta URL con el enlace público de tu data.json en SharePoint
+// (Compartir → Cualquier persona con el vínculo puede ver → copiar enlace directo al archivo)
+const DATA_URL = 'https://compassion.sharepoint.com/teams/PEOffice-BUS/Shared%20Documents/data.json'; // URL SharePoint
+
+// Datos de respaldo (última versión cargada del Excel)
+// Se usan si el fetch falla (sin conexión, error de CORS, etc.)
+const DATA_FALLBACK = {"PE0696":{"codigo":"PE0696","region":"NOR ORIENTE","tipos":{"INICIAL":{"total":2,"ind3":2,"ind5":2,"ind6":2,"ind7":2,"ind8":0,"ind9":2,"ind12":1}}},"PE0351":{"codigo":"PE0351","region":"HUÁNUCO","tipos":{"INICIAL":{"total":1,"ind3":0,"ind5":1,"ind6":1,"ind7":0,"ind8":1,"ind9":0,"ind12":1}}},"PE0638":{"codigo":"PE0638","region":"NOR ORIENTE","tipos":{"INICIAL":{"total":4,"ind3":4,"ind5":3,"ind6":3,"ind7":2,"ind8":4,"ind9":4,"ind12":4}}},"PE0358":{"codigo":"PE0358","region":"HUANCAYO","tipos":{"INICIAL":{"total":205,"ind3":160,"ind5":152,"ind6":80,"ind7":62,"ind8":93,"ind9":135,"ind12":127}}},"PE0541":{"codigo":"PE0541","region":"NOR ORIENTE","tipos":{"INICIAL":{"total":111,"ind3":88,"ind5":86,"ind6":23,"ind7":23,"ind8":65,"ind9":47,"ind12":106}}},"PE0607":{"codigo":"PE0607","region":"PIURA","tipos":{"INICIAL":{"total":113,"ind3":80,"ind5":93,"ind6":59,"ind7":21,"ind8":61,"ind9":66,"ind12":98}}},"PE0551":{"codigo":"PE0551","region":"HUÁNUCO","tipos":{"INICIAL":{"total":20,"ind3":19,"ind5":10,"ind6":17,"ind7":8,"ind8":13,"ind9":6,"ind12":19}}},"PE0356":{"codigo":"PE0356","region":"JUNÍN-PASCO","tipos":{"INICIAL":{"total":32,"ind3":22,"ind5":9,"ind6":22,"ind7":1,"ind8":13,"ind9":3,"ind12":18}}}};
+const BY_REGION_FALLBACK = {"HUANCAYO":["PE0355","PE0358","PE0591","PE0670"],"HUÁNUCO":["PE0351","PE0551","PE0552","PE0554"],"JUNÍN-PASCO":["PE0356","PE0527","PE0530","PE0623"],"LAMBAYEQUE-CHICLAYO":["PE0545"],"NOR ORIENTE":["PE0537","PE0538","PE0541","PE0638","PE0641","PE0653","PE0654","PE0657","PE0658","PE0667","PE0674","PE0681","PE0696","PE0698"],"PIURA":["PE0330","PE0331","PE0372","PE0585","PE0607","PE0608","PE0630"],"SELVA CENTRAL Y TARMA":["PE0363","PE0563","PE0902"]};
+
+let DATA = DATA_FALLBACK;
+let BY_REGION = BY_REGION_FALLBACK;
+let ultimaActualizacion = null;
+
+async function cargarDatos() {
+  const payload = /*DATOS_AQUI*/null/*FIN_DATOS*/;
+  if (!payload) return;
+  DATA = payload.data;
+  BY_REGION = payload.byRegion;
+  ultimaActualizacion = payload.actualizado;
+  const badge = document.getElementById('actualizadoBadge');
+  if (badge && ultimaActualizacion) {
+    const d2 = new Date(ultimaActualizacion);
+    badge.textContent = '🔄 Actualizado: ' + d2.toLocaleDateString('es-PE', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    badge.style.display = 'inline-flex';
+  }
+}
+
+const INDICADORES = [
+  {key:'ind3',  num:'3',  emoji:'🧠', color:'#3B82F6', bg:'#EEF2FF',
+   nombre:'Identifica factores de riesgo y protección',
+   desc:'Nº de participantes que identifican 3 factores de riesgo y 3 factores de protección contra el abuso'},
+  {key:'ind5',  num:'5',  emoji:'🛡️', color:'#7C3AED', bg:'#F5F3FF',
+   nombre:'Reconoce ambientes seguros contra el abuso',
+   desc:'Nº de participantes que identifican dos elementos que generan ambientes seguros contra el abuso en la FCP'},
+  {key:'ind6',  num:'6',  emoji:'👤', color:'#059669', bg:'#D1FAE5',
+   nombre:'Sabe quién es el defensor',
+   desc:'Nº de participantes que saben que el defensor es el canal designado de ayuda en la iglesia contra todo abuso'},
+  {key:'ind7',  num:'7',  emoji:'📢', color:'#D97706', bg:'#FEF3C7',
+   nombre:'Conoce cómo ingresar a Resolver',
+   desc:'Nº de participantes que saben las formas de ingreso a Resolver y cómo reportar cualquier tipo de abuso'},
+  {key:'ind8',  num:'8',  emoji:'🚨', color:'#DC2626', bg:'#FEE2E2',
+   nombre:'Ha reportado un caso de abuso',
+   desc:'Nº de participantes que indican haber reportado alguna vez a cualquier plataforma o canal un abuso'},
+  {key:'ind9',  num:'9',  emoji:'🤝', color:'#0284C7', bg:'#E0F2FE',
+   nombre:'Se siente seguro al informar',
+   desc:'Nº de participantes que se sienten seguros al informar casos de abuso o situaciones de riesgo en la FCP'},
+  {key:'ind12', num:'12', emoji:'📚', color:'#65A30D', bg:'#ECFCCB',
+   nombre:'Comparte sus aprendizajes',
+   desc:'Nº de participantes que comparten sus aprendizajes de "Aprendo y me protejo" con pares y adultos'},
+];
+
+function onRegionChange(){
+  const reg = document.getElementById('selRegion').value;
+  const sel = document.getElementById('selCodigo');
+  sel.innerHTML = '';
+  if(!reg){ sel.innerHTML='<option value="">Primero selecciona la región...</option>'; sel.disabled=true; return; }
+  sel.disabled = false;
+  const opt0 = document.createElement('option'); opt0.value=''; opt0.textContent='Selecciona el código...'; sel.appendChild(opt0);
+  (BY_REGION[reg]||[]).forEach(c=>{
+    const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o);
+  });
+}
+
+function login(){
+  const codigo = document.getElementById('inputCodigo').value.trim().toUpperCase();
+  if(!codigo || !DATA[codigo]){
+    document.getElementById('loginError').style.display='block'; return;
+  }
+  document.getElementById('loginError').style.display='none';
+  currentTipo = null;
+  localStorage.setItem('compassion_iglesia_codigo', codigo);
+  document.getElementById('loginOverlay').style.display='none';
+  document.getElementById('appHeader').style.display='flex';
+  document.getElementById('appMain').style.display='block';
+  renderDashboard(codigo);
+}
+
+function logout(){
+  localStorage.removeItem('compassion_iglesia_codigo');
+  document.getElementById('loginOverlay').style.display='flex';
+  document.getElementById('appHeader').style.display='none';
+  document.getElementById('appMain').style.display='none';
+  document.getElementById('inputCodigo').value='';
+  document.getElementById('loginError').style.display='none';
+}
+
+function pctClass(pct){
+  if(pct>=70) return 'high';
+  if(pct>=40) return 'mid';
+  return 'low';
+}
+
+function tipoLabel(t){
+  if(t==='INICIAL') return '🟢 Encuesta Inicial';
+  if(t==='FINAL')   return '🔵 Encuesta Final';
+  return '⚪ ' + t;
+}
+function tipoStyle(t, active){
+  if(t==='INICIAL') return active
+    ? 'padding:8px 18px;border-radius:20px;border:2px solid #16A34A;background:#16A34A;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;'
+    : 'padding:8px 18px;border-radius:20px;border:2px solid #16A34A;background:#fff;color:#16A34A;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;';
+  if(t==='FINAL') return active
+    ? 'padding:8px 18px;border-radius:20px;border:2px solid #1D4ED8;background:#1D4ED8;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;'
+    : 'padding:8px 18px;border-radius:20px;border:2px solid #1D4ED8;background:#fff;color:#1D4ED8;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;';
+  return active
+    ? 'padding:8px 18px;border-radius:20px;border:2px solid #6B7280;background:#6B7280;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;'
+    : 'padding:8px 18px;border-radius:20px;border:2px solid #6B7280;background:#fff;color:#6B7280;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;';
+}
+
+let currentCodigo = null;
+let currentTipo = null;
+
+function renderDashboard(codigo){
+  currentCodigo = codigo;
+  const ig = DATA[codigo];
+  document.getElementById('hdrCodigo').textContent = codigo;
+  document.getElementById('hdrRegion').textContent = ig.region;
+
+  // Render tipo buttons
+  const tipos = Object.keys(ig.tipos || {});
+  const btns = document.getElementById('tipoBtns');
+  btns.innerHTML = '';
+
+  // Default: prefer INICIAL, then FINAL, then first
+  if(!currentTipo || !ig.tipos[currentTipo]){
+    currentTipo = ig.tipos['INICIAL'] ? 'INICIAL' : ig.tipos['FINAL'] ? 'FINAL' : tipos[0];
+  }
+
+  tipos.forEach(t => {
+    const btn = document.createElement('button');
+    btn.textContent = tipoLabel(t);
+    btn.style.cssText = tipoStyle(t, t === currentTipo);
+    btn.onclick = () => { currentTipo = t; renderDashboard(codigo); };
+    btns.appendChild(btn);
+  });
+
+  // Render table for selected tipo
+  const d = ig.tipos[currentTipo] || { total:0, ind3:0, ind5:0, ind6:0, ind7:0, ind8:0, ind9:0, ind12:0 };
+  document.getElementById('totalBadge').textContent = `👥 ${d.total} encuestado${d.total!==1?'s':''} en total`;
+
+  // Indicator table
+  const tbody = document.getElementById('indTableBody');
+  tbody.innerHTML = '';
+  INDICADORES.forEach(ind=>{
+    const score = d[ind.key];
+    const total = d.total;
+    const pct = total>0?Math.round(score/total*100):0;
+    const cls = pctClass(pct);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <div class="ind-icon" style="background:${ind.bg};color:${ind.color};">${ind.emoji}</div>
+      </td>
+      <td>
+        <div class="ind-name">Indicador ${ind.num} — ${ind.nombre}</div>
+        <div class="ind-desc">${ind.desc}</div>
+      </td>
+      <td class="score-cell">
+        <div class="score-wrap">
+          <div>
+            <span class="score-num" style="color:${ind.color};">${score}</span>
+            <span class="score-total"> / ${total}</span>
+          </div>
+          <span class="score-pct pct-${cls}">${pct}%</span>
+        </div>
+      </td>
+      <td class="prog-cell">
+        <div class="prog-bar-wrap">
+          <div class="prog-bar prog-${cls}" style="width:${pct}%;"></div>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+window.onload = async () => {
+  await cargarDatos();
+  const s = localStorage.getItem('compassion_iglesia_codigo');
+  if (s && DATA[s]) {
+    document.getElementById('inputCodigo').value = s;
+    login();
+  }
+};
+</script>
+</body>
+</html>
